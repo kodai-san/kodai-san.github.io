@@ -234,6 +234,9 @@ figcaption {
 .gallery-3 { grid-template-columns: repeat(3, 1fr); }
 .gallery figure { margin: 12px 0; }
 
+.status { padding: 8px 14px; border-left: 3px solid var(--accent); }
+.card h3 { margin: 0 0 8px; }
+
 .back { display: inline-block; margin-top: 32px; }
 
 ul { margin: 0 0 16px; padding-left: 22px; }

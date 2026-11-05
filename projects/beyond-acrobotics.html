@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beyond Acrobotics | Kodai Tsutsui</title>
+  <meta name="description" content="Extending the Acrobotics generalist parkour pipeline to new robot bodies and imperfect height maps, on ANYmal D, Unitree Go2-W and Unitree G1.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="../index.html">Kodai Tsutsui</a>
+      <ul class="tabs">
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../cv.html">cv</a></li>
+        <li><a href="../projects.html" aria-current="true">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Beyond Acrobotics</h1>
+    <p class="subtitle">Extending generalist parkour to new morphologies and imperfect height maps.</p>
+
+    <h2 id="overview">Overview</h2>
+    <p>This was my summer internship in the Articulated Robots Group at the Oxford Robotics Institute, supervised by Ioannis Havoutis. It extends <a href="https://arxiv.org/abs/2509.02727">Acrobotics</a>, which trains one generalist parkour policy with minimal compute, and Benjy McCartney's 2025-26 project, which added sparse terrain and ran a policy on a real ANYmal.</p>
+    <p>I'm asking two questions: does the same pipeline transfer to very different robots, and can it handle the imperfect height maps that real depth cameras produce?</p>
+    <p class="status"><strong>Status:</strong> all results below are from simulation, and I'm currently deploying on ANYmal D and G1.</p>
+
+    <div class="cards">
+      <a class="card" href="#anymal">
+        <img src="../assets/img/projects/anymal.jpg" alt="ANYmal D quadruped crossing stepping stones in simulation" width="800" height="450">
+        <div class="card-body">
+          <h3>ANYmal D</h3>
+          <p>Fine-tuning for real height maps</p>
+        </div>
+      </a>
+      <a class="card" href="#go2w">
+        <img src="../assets/img/projects/go2w.jpg" alt="Unitree Go2-W wheeled quadruped on stairs in simulation" width="800" height="450">
+        <div class="card-body">
+          <h3>Unitree Go2-W</h3>
+          <p>Legs and wheels</p>
+        </div>
+      </a>
+      <a class="card" href="#g1">
+        <img src="../assets/img/projects/g1.jpg" alt="Unitree G1 humanoid walking between poles in simulation" width="800" height="450">
+        <div class="card-body">
+          <h3>Unitree G1</h3>
+          <p>From four legs to two</p>
+        </div>
+      </a>
+    </div>
+
+    <h2 id="anymal">ANYmal D</h2>
+    <p>A policy trained on a perfect height map failed on the map built from depth cameras, because the camera map partly fills the gaps beside stones. I measured these errors in Gazebo, trained a learned noise model on them, and fine-tuned the policy on that model.</p>
+    <p>On grid stones with the simulated errors, finishes rose from 3.7 % to 83.6 %. In Gazebo the fine-tuned policy still does much better on a perfect map than on the camera map, so perception is still the main gap. On clean maps it averages 88.0 % finishes across 11 terrains, though mixed columns remain unsolved.</p>
+    <p class="status"><strong>Status:</strong> currently deploying on the real robot.</p>
+    <figure>
+      <video src="../assets/video/anymal/mapnoise_grid_stones_d0.7.mp4" poster="../assets/img/posters/anymal/mapnoise_grid_stones_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Fine-tuned ANYmal D policy on grid stones in Isaac Sim"></video>
+      <figcaption>Fine-tuned policy on grid stones in Isaac Sim, with a clean map. Red dots are goal waypoints, and the clip jumps when an episode restarts.</figcaption>
+    </figure>
+    <div class="gallery">
+      <figure>
+        <video src="../assets/video/anymal/s42_cattle_grid_d0.7.mp4" poster="../assets/img/posters/anymal/s42_cattle_grid_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="ANYmal D on a cattle grid"></video>
+        <figcaption>Cattle grid, base policy</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/anymal/s42_mixed_columns_d0.7.mp4" poster="../assets/img/posters/anymal/s42_mixed_columns_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="ANYmal D on mixed columns"></video>
+        <figcaption>Mixed columns, base policy</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/anymal/s42_gaps_d0.7.mp4" poster="../assets/img/posters/anymal/s42_gaps_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="ANYmal D on gaps"></video>
+        <figcaption>Gaps, base policy</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/anymal/s42_weave_poles_d0.7.mp4" poster="../assets/img/posters/anymal/s42_weave_poles_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="ANYmal D on weave poles"></video>
+        <figcaption>Weave poles, base policy</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="go2w">Unitree Go2-W</h2>
+    <p>I moved the same pipeline onto a much smaller quadruped with wheels for feet. The policy controls both the legs and the wheels, and averages 91.1 % finishes across 15 terrains on clean maps, with mixed columns again unsolved.</p>
+    <p class="status"><strong>Status:</strong> simulation only so far.</p>
+    <figure>
+      <video src="../assets/video/go2w/go2w_stairs_up_down_d0.7.mp4" poster="../assets/img/posters/go2w/go2w_stairs_up_down_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Go2-W on stairs going up and down"></video>
+      <figcaption>Stairs in Isaac Sim</figcaption>
+    </figure>
+    <div class="gallery">
+      <figure>
+        <video src="../assets/video/go2w/go2w_inclined_boxes_d0.7.mp4" poster="../assets/img/posters/go2w/go2w_inclined_boxes_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Go2-W on inclined boxes"></video>
+        <figcaption>Inclined boxes</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/go2w/go2w_gaps_d0.7.mp4" poster="../assets/img/posters/go2w/go2w_gaps_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Go2-W on gaps"></video>
+        <figcaption>Gaps</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/go2w/go2w_weave_poles_d0.7.mp4" poster="../assets/img/posters/go2w/go2w_weave_poles_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Go2-W on weave poles"></video>
+        <figcaption>Weave poles</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/go2w/go2w_boxes_d1.0.mp4" poster="../assets/img/posters/go2w/go2w_boxes_d1.0.jpg" controls muted loop playsinline preload="none" aria-label="Go2-W on boxes at the hardest trained difficulty"></video>
+        <figcaption>Boxes, at the hardest level it trained on</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="g1">Unitree G1</h2>
+    <p>The third robot swaps four legs for two. The policy controls the humanoid's 12 leg joints and averages 95.1 % finishes across 6 terrains on clean maps. Its weakest terrain is flat ground, at 73.8 %.</p>
+    <p class="status"><strong>Status:</strong> currently deploying on the real robot.</p>
+    <figure>
+      <video src="../assets/video/g1/g1_v2_large_steps_d0.7.mp4" poster="../assets/img/posters/g1/g1_v2_large_steps_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="G1 humanoid on large steps"></video>
+      <figcaption>Large steps in Isaac Sim</figcaption>
+    </figure>
+    <div class="gallery gallery-3">
+      <figure>
+        <video src="../assets/video/g1/g1_v2_gaps_d0.7.mp4" poster="../assets/img/posters/g1/g1_v2_gaps_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="G1 humanoid on gaps"></video>
+        <figcaption>Gaps</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/g1/g1_v2_stairs_d0.7.mp4" poster="../assets/img/posters/g1/g1_v2_stairs_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="G1 humanoid on stairs"></video>
+        <figcaption>Stairs</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/g1/g1_v2_weave_poles_d0.7.mp4" poster="../assets/img/posters/g1/g1_v2_weave_poles_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="G1 humanoid on weave poles"></video>
+        <figcaption>Weave poles</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="credits">Credits</h2>
+    <p>Thanks to Benjy McCartney for the pipeline this builds on, and Vassil Atanassov for robot and deployment support. The Go2-W model comes from robot_lab, and the G1 model from unitree_ros. Finish rates are from Isaac Lab at difficulty 0.7, and the terrain sets differ, so they don't rank the robots.</p>
+
+    <a class="back" href="../projects.html">&larr; All projects</a>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 5, 2026.</footer>
+</body>
+</html>
