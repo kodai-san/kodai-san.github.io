@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kodai Tsutsui</title>
+  <meta name="description" content="Kodai Tsutsui: learning-based control for legged robots.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <ul class="tabs">
+        <li><a href="index.html" aria-current="page">about</a></li>
+        <li><a href="cv.html">cv</a></li>
+        <li><a href="projects.html">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Kodai Tsutsui</h1>
+    <p class="subtitle">University of Oxford</p>
+
+    <div class="intro">
+      <p>I work on learning-based control for legged robots. For my fourth-year project, supervised by Ioannis Havoutis, I'm training a quadruped to cross sparse terrain like stepping stones, and working out why a policy that succeeds on a perfect height map fails on one built from depth cameras.</p>
+      <p>I've also moved the same training pipeline onto a wheeled quadruped and a humanoid. You can see all of this on the <a href="projects.html">projects page</a>, and my background is on the <a href="cv.html">CV page</a>.</p>
+    </div>
+
+    <h2>news</h2>
+    <dl class="news">
+      <dt>Oct 2026</dt>
+      <dd>Moved the parkour pipeline onto the <a href="projects/g1-parkour.html">Unitree G1 humanoid</a>, and fine-tuned the <a href="projects/anymal-parkour.html">ANYmal D policy</a> against a model of camera-map errors.</dd>
+      <dt>Sep 2026</dt>
+      <dd>Trained the base ANYmal D policy on sparse terrain, and a first <a href="projects/go2w-parkour.html">wheeled-legged version on the Unitree Go2-W</a>.</dd>
+    </dl>
+
+    <div class="links">
+      <a href="https://github.com/kodai-san" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+      </a>
+    </div>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 4, 2026.</footer>
+</body>
+</html>
