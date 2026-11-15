@@ -34,7 +34,7 @@
     <h2 id="overview">Overview</h2>
     <p>This is my research internship in the Articulated Robotics Group at the Oxford Robotics Institute, supervised by Ioannis Havoutis. It extends <a href="https://arxiv.org/abs/2509.02727">Acrobotics</a>, which trains one generalist parkour policy with minimal compute, and Benjy McCartney's 2025-26 project, which added sparse terrain and ran a policy on a real ANYmal.</p>
     <p>I'm asking two questions: does the same pipeline transfer to very different robots, and can it handle the imperfect height maps that real depth cameras produce?</p>
-    <p class="status"><strong>Status:</strong> all results below are from simulation, and I'm currently deploying on ANYmal D and G1.</p>
+    <p class="status"><strong>Status:</strong> the ANYmal D policy has been successfully deployed on the real robot, and G1 deployment is in progress. The results below are from simulation.</p>
 
     <div class="cards">
       <a class="card" href="#anymal">
@@ -63,7 +63,7 @@
     <h2 id="anymal">ANYmal D</h2>
     <p>A policy trained on a perfect height map failed on the map built from depth cameras, because the camera map partly fills the gaps beside stones. I measured these errors in Gazebo, trained a learned noise model on them, and fine-tuned the policy on that model.</p>
     <p>On grid stones with the simulated errors, finishes rose from 3.7 % to 83.6 %. In Gazebo the fine-tuned policy still does much better on a perfect map than on the camera map, so perception is still the main gap. On clean maps it averages 88.0 % finishes across 11 terrains, though mixed columns remain unsolved.</p>
-    <p class="status"><strong>Status:</strong> currently deploying on the real robot.</p>
+    <p class="status"><strong>Status:</strong> successfully deployed on the real ANYmal D over stairs and stepping stones.</p>
     <figure>
       <video src="../assets/video/anymal/mapnoise_grid_stones_d0.7.mp4" poster="../assets/img/posters/anymal/mapnoise_grid_stones_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Fine-tuned ANYmal D policy on grid stones in Isaac Sim"></video>
       <figcaption>Fine-tuned policy on grid stones in Isaac Sim, with a clean map. Red dots are goal waypoints, and the clip jumps when an episode restarts.</figcaption>
@@ -115,7 +115,7 @@
 
     <h2 id="g1">Unitree G1</h2>
     <p>The third robot swaps four legs for two. The policy controls the humanoid's 12 leg joints and averages 95.1 % finishes across 6 terrains on clean maps. Its weakest terrain is flat ground, at 73.8 %.</p>
-    <p class="status"><strong>Status:</strong> currently deploying on the real robot.</p>
+    <p class="status"><strong>Status:</strong> deployment on the real robot is in progress.</p>
     <figure>
       <video src="../assets/video/g1/g1_v2_large_steps_d0.7.mp4" poster="../assets/img/posters/g1/g1_v2_large_steps_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="G1 humanoid on large steps"></video>
       <figcaption>Large steps in Isaac Sim</figcaption>
