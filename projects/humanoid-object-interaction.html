@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact-planner-based humanoid object interaction | Kodai Tsutsui</title>
+  <meta name="description" content="Master's thesis on contact-planner-based object interaction with the Unitree G1 humanoid.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="../index.html">Kodai Tsutsui</a>
+      <ul class="tabs">
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../cv.html">cv</a></li>
+        <li><a href="../projects.html" aria-current="true">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Contact-planner-based humanoid object interaction</h1>
+    <p class="subtitle">Master's thesis on object interaction with the Unitree G1, using a learned contact planner.</p>
+
+    <h2 id="overview">Overview</h2>
+    <p>My master's thesis, in the Articulated Robotics Group at the Oxford Robotics Institute, is on contact-planner-based object interaction for the Unitree G1 humanoid. It combines human motion retargeting, whole-body motion tracking and learned contact planning, with the aim of deploying on the real robot.</p>
+    <p class="status"><strong>Status:</strong> in progress. I'm currently reproducing OmniContact in simulation.</p>
+
+    <h2 id="progress">Progress</h2>
+    <figure>
+      <video src="../assets/video/thesis/omnicontact_reproduction.mp4" poster="../assets/img/posters/thesis/omnicontact_reproduction.jpg" controls muted loop playsinline preload="none" aria-label="Unitree G1 humanoid pushing a box towards a green goal region in simulation"></video>
+      <figcaption>My reproduction of OmniContact so far: the G1 moves a box to the green goal region. The clip includes both successful and failed episodes.</figcaption>
+    </figure>
+
+    <a class="back" href="../projects.html">&larr; All projects</a>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 24, 2026.</footer>
+</body>
+</html>

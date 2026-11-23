@@ -220,6 +220,27 @@ figure video {
   box-shadow: var(--shadow);
 }
 figure video { aspect-ratio: 16 / 9; }
+figure video.portrait { aspect-ratio: 9 / 16; width: auto; max-width: 100%; height: min(600px, 75vh); margin: 0 auto; }
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+}
+figure img.narrow { width: min(100%, 560px); margin: 0 auto; }
+/* report figures and diagrams have white backgrounds, so keep a light frame in dark mode */
+figure img.diagram { background: #fff; }
+.embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow);
+}
+.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.cv-media { max-width: 560px; margin: 12px 0 8px; }
 figcaption {
   margin-top: 10px;
   color: var(--muted);

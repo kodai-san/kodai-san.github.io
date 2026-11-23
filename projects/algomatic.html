@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Small bipedal robot | Kodai Tsutsui</title>
+  <meta name="description" content="Electronics, calibration and interaction policies for a small bipedal robot at Algomatic in Tokyo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="../index.html">Kodai Tsutsui</a>
+      <ul class="tabs">
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../cv.html">cv</a></li>
+        <li><a href="../projects.html" aria-current="true">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Small bipedal robot</h1>
+    <p class="subtitle">Electronics, calibration and interaction policies at Algomatic, Tokyo.</p>
+
+    <h2 id="overview">Overview</h2>
+    <p>I spent March and April 2026 as an AI robotics engineering intern at Algomatic, a robotics start-up in Tokyo, working on the electronics and software of a novel small bipedal robot.</p>
+    <ul>
+      <li>Improved the imitation-learning policy and raised the walking success rate on the Open Duck robot by 80 %, with a new calibration pipeline and custom PCBs for better sensor&ndash;microcontroller integration.</li>
+      <li>Developed a human-interaction policy in MuJoCo and deployed it with capacitive touch sensors and infrared proximity sensors.</li>
+      <li>Designed the power management system for the new robot, supporting 2 CyberGears and a Jetson Orin AGX.</li>
+    </ul>
+
+    <h2 id="deployment">Deployment</h2>
+    <figure>
+      <video src="../assets/video/algomatic/walking.mp4" poster="../assets/img/posters/algomatic/walking.jpg" controls muted loop playsinline preload="none" aria-label="The small bipedal robot walking on the office floor while a person guides it with their hand"></video>
+      <figcaption>Deployment on the real robot, with a person interacting with it by hand</figcaption>
+    </figure>
+    <div class="gallery">
+      <figure>
+        <video class="portrait" src="../assets/video/algomatic/interaction.mp4" poster="../assets/img/posters/algomatic/interaction.jpg" controls muted loop playsinline preload="none" aria-label="The small bipedal robot reacting as a person touches its head"></video>
+        <figcaption>Interaction on the real robot</figcaption>
+      </figure>
+      <figure>
+        <video src="../assets/video/algomatic/mujoco.mp4" poster="../assets/img/posters/algomatic/mujoco.jpg" controls muted loop playsinline preload="none" aria-label="The small bipedal robot running a locomotion policy in a MuJoCo simulation"></video>
+        <figcaption>Locomotion policy trained in MuJoCo</figcaption>
+      </figure>
+    </div>
+
+    <a class="back" href="../projects.html">&larr; All projects</a>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 24, 2026.</footer>
+</body>
+</html>

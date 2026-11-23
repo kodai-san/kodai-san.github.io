@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PADS: Police Array Drone System | Kodai Tsutsui</title>
+  <meta name="description" content="PADS, a group design project for an autonomous multi-drone system for urban policing in Westminster.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="../index.html">Kodai Tsutsui</a>
+      <ul class="tabs">
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../cv.html">cv</a></li>
+        <li><a href="../projects.html" aria-current="true">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>PADS: Police Array Drone System</h1>
+    <p class="subtitle">An autonomous multi-drone system for responding to burglaries in Westminster.</p>
+
+    <h2 id="overview">Overview</h2>
+    <p>PADS was our third-year group design project (May 2026), with Kaito Bremner, Alrik Cheung and Vikyrthan Kirushnamoorthy. Police on the ground often reach a burglary after the suspects have fled, so PADS sends drones that reach a reported crime in under 2 minutes and keep the suspects in view until officers arrive.</p>
+    <p>Small <strong>Hummingbird</strong> quadcopters pursue suspects at low altitude, an <strong>Eagle</strong> VTOL drone relays their links over the urban canyon, and docks and a ground station handle charging, perception in the cloud, and the operators. I was responsible for station placement and dispatch, and for path planning, control, state estimation and multi-drone coordination.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/pads/system-overview.jpg" alt="PADS system diagram: civilian and police apps, the ground central station, Eagle relay UAV, Hummingbird pursuit UAVs, onboard perception and path planning" loading="lazy">
+      <figcaption>Overall system</figcaption>
+    </figure>
+
+    <h2 id="logistics">Station placement</h2>
+    <p>Using about 17,000 burglaries recorded in Westminster from 2023 to 2025, I placed drone stations with a weighted k-means that favours credible alarms and avoids dense housing. Five stations first meet the 2-minute target at the 95th percentile, and 10 stations give a P95 response of 90 s and a mean of 69 s.</p>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/burglary-density.jpg" alt="Density map of burglary incidents across Westminster" loading="lazy">
+        <figcaption>Burglary density, 2023&ndash;2025</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/station-locations.jpg" alt="Map of Westminster with 10 optimised drone station locations" loading="lazy">
+        <figcaption>Optimised locations for 10 stations</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img class="diagram narrow" src="../assets/img/projects/pads/response-time.jpg" alt="Plot of mean and P95 response time falling as the number of stations increases, against a 120 s target" loading="lazy">
+      <figcaption>Response time against the number of stations; the dashed line is the 120 s target</figcaption>
+    </figure>
+
+    <h2 id="control">Path planning and control</h2>
+    <p>A* plans the high-altitude transit to the incident, and an MPC tracks the suspect at low altitude. I reduced the MPC to 2D so it meets the 20 Hz real-time target on a Jetson Orin NX, tested it on a corridor turn, then on a 120 s chase through Westminster's road network built from OpenStreetMap. Bayesian optimisation then tuned the MPC weights to cut overshoot, jerk and energy.</p>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/city-target-path.jpg" alt="Westminster building map with a red target path through four waypoints" loading="lazy">
+        <figcaption>Target path through Westminster</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/mpc-2d-metrics.jpg" alt="Plots of distance to target, tilt angles, power, jerk and heading rate over a corridor turn" loading="lazy">
+        <figcaption>MPC metrics for a 90&deg; corridor turn</figcaption>
+      </figure>
+    </div>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/bo-dashboard.jpg" alt="Dashboard of Bayesian optimisation trials for the MPC weights" loading="lazy">
+        <figcaption>Bayesian optimisation of the MPC weights</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/bo-convergence.jpg" alt="Convergence plot of the Bayesian optimisation" loading="lazy">
+        <figcaption>Convergence; the best cost was found within 20 trials</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="estimation">Depth and state estimation</h2>
+    <p>The Hummingbird is too small for a useful stereo baseline, so I proposed monocular homography to estimate the suspect's range. I modelled the sensor noise and tuned a Kalman filter, which brings drone and target position errors within the 0.5 m and 1 m bounds and sets the minimum sensor accuracy for the hardware and vision teams.</p>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/monocular-homography.jpg" alt="Geometry diagram of monocular homography from pixel to world coordinates" loading="lazy">
+        <figcaption>Monocular homography geometry</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/kf-tuning.jpg" alt="Four plots of distance error, oscillation, energy and jerk against the Kalman filter process noise" loading="lazy">
+        <figcaption>Effect of Kalman filter tuning</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="multi-drone">Multi-drone coordination</h2>
+    <p>Three Hummingbirds fly per group of suspects. I compared formation controllers in simulation; all met the collision-avoidance target, and leader-follower gave the lowest formation error. When suspects split up, the Hungarian algorithm assigns drones to the new groups, skipping drones with low battery.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/pads/target-assignment.jpg" alt="Two plots of drones assigned to split suspects using the Hungarian algorithm" loading="lazy">
+      <figcaption>Target assignment when suspects split: every drone assigned (left), and only the two best drones assigned (right)</figcaption>
+    </figure>
+
+    <h2 id="team">The rest of the system</h2>
+    <h3>Hardware and communications (Alrik Cheung)</h3>
+    <p>Alrik designed the Hummingbird hardware, the Eagle relay and the docks, and the radio links between them. The Hummingbird reaches a thrust-to-weight ratio above 2 and tracks for 9 min 48 s.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/pads/comms-topology.jpg" alt="Illustration of Hummingbird drones, the Eagle relay drone, a dock and the ground station connected by radio links" loading="lazy">
+      <figcaption>Hummingbird, Eagle and ground station communication topology</figcaption>
+    </figure>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/camera-payload.jpg" alt="Render of the camera payload with thermal, NIR and daytime cameras on a 2-axis gimbal" loading="lazy">
+        <figcaption>Hummingbird camera payload</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/hummingbird-layout.jpg" alt="Side and 3D views of the Hummingbird's internal layout" loading="lazy">
+        <figcaption>Hummingbird internal layout</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/pads/docking-station.jpg" alt="3D model and wireframe of the stacked Hummingbird docking station" loading="lazy">
+      <figcaption>Docking station</figcaption>
+    </figure>
+
+    <h3>Perception and data fusion (Kaito Bremner)</h3>
+    <p>Kaito built the perception system: YOLO detection and BoT-SORT tracking on the drone, with a larger model on the ground server that recovers tracking accuracy, and a hybrid fusion of RGB, NIR, thermal and LiDAR across lighting conditions.</p>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/perception-flowchart.jpg" alt="Flowchart of the UAV and ground server perception systems" loading="lazy">
+        <figcaption>Perception system</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/hybrid-fusion.jpg" alt="Diagram of the hybrid fusion architecture with early and late fusion stages" loading="lazy">
+        <figcaption>Hybrid sensor fusion</figcaption>
+      </figure>
+    </div>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/occlusion-tracking.jpg" alt="Aerial images showing a tracked person before and after occlusion, on the drone and on the ground server" loading="lazy">
+        <figcaption>Tracking through occlusion, on the drone (left) and the ground server (right)</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/crowd-tracking.jpg" alt="A crowded street before and after tracking, with many detected pedestrians" loading="lazy">
+        <figcaption>Tracking in a dense crowd</figcaption>
+      </figure>
+    </div>
+
+    <h3>Human-robot interface and command centre (Vikyrthan Kirushnamoorthy)</h3>
+    <p>Vikyrthan built the apps that civilians use to report crimes, by form, chatbot or voice, and the operator interface for controlling drones and formations, with a heads-up display. He also designed the command and control centre.</p>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/reporting-app.jpg" alt="Screenshot of the crime reporting web form" loading="lazy">
+        <figcaption>Crime reporting app</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/drone-control-app.jpg" alt="Screenshot of the operator map with drones and a selected drone's status" loading="lazy">
+        <figcaption>Drone control app</figcaption>
+      </figure>
+    </div>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/formations.jpg" alt="Three map screenshots of drones in line, V and diamond formations" loading="lazy">
+        <figcaption>Formation control</figcaption>
+      </figure>
+      <figure>
+        <img class="diagram" src="../assets/img/projects/pads/hud.jpg" alt="Aerial drone view with detection and tracking overlays" loading="lazy">
+        <figcaption>Heads-up display</figcaption>
+      </figure>
+    </div>
+
+    <a class="back" href="../projects.html">&larr; All projects</a>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 24, 2026.</footer>
+</body>
+</html>

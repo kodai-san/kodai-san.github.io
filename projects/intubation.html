@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Haptic intubation trainer | Kodai Tsutsui</title>
+  <meta name="description" content="A haptic training device for tracheal intubation that simulates varied airway conditions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/site.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="../index.html">Kodai Tsutsui</a>
+      <ul class="tabs">
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../cv.html">cv</a></li>
+        <li><a href="../projects.html" aria-current="true">projects</a></li>
+      </ul>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 14.5A9 9 0 0 1 9.5 3a9 9 0 1 0 11.5 11.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 2.8l2.8 2.8-1.4 1.4-2.8-2.8zM18.4 17l2.8 2.8-1.4 1.4-2.8-2.8zM2.8 19.8L5.6 17 7 18.4l-2.8 2.8zM17 5.6l2.8-2.8 1.4 1.4L18.4 7z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Haptic intubation trainer</h1>
+    <p class="subtitle">A training device for tracheal intubation that simulates varied airway conditions.</p>
+
+    <h2 id="background">Background</h2>
+    <p>Tracheal intubation is the insertion of a tube through the mouth or nose into the trachea, to keep the airway open and deliver oxygen. Success depends on modulating force through layered tissue: too much risks perforation, and too little leaves the vocal cords out of view.</p>
+    <p>Current training methods all fall short on that force judgement:</p>
+    <ul>
+      <li><strong>Manikins</strong> are rigid plastic, so trainees learn the motion but not the feel of the tissue.</li>
+      <li><strong>Cadavers</strong> have realistic anatomy, but their tissue is stiffer than living tissue, and they are expensive and scarce.</li>
+      <li><strong>Real patients</strong> are the gold standard, but limit repetition, and specific scenarios can't be practised on demand.</li>
+      <li><strong>VR and screen simulators</strong> give visual feedback only, with no haptics.</li>
+    </ul>
+    <p>No existing trainer gives realistic, tunable haptic feedback that maps to tissue biomechanics. Difficult airways, such as Mallampati III&ndash;IV, limited neck mobility or obesity, are what trainees most need to practise and the hardest to meet on real patients.</p>
+
+    <h2 id="overview">My work</h2>
+    <p>I worked on this as a research intern in Oxford's Healthcare Biorobotics Lab, Institute of Biomedical Engineering, from June to December 2025.</p>
+    <ul>
+      <li>Upgraded the prior design with a new force-transfer mechanism, a state-estimating current controller (DC motor current control using only position encoders) and compact electronics.</li>
+      <li>Proposed an ML force-sensing pipeline trained on real clinical data, achieving sub-50 ms latency and 5 Nm peak torque with industry-standard SNR.</li>
+    </ul>
+
+    <h2 id="hardware">Hardware</h2>
+    <div class="gallery">
+      <figure>
+        <img class="diagram" src="../assets/img/projects/intubation/cad.jpg" alt="Annotated CAD model of the trainer: laryngoscope handle and blade on a rotating stand, driven by a haptic DC motor through timing belts, with encoders and a self-locking base motor" loading="lazy">
+        <figcaption>CAD model of the trainer</figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/img/projects/intubation.jpg" alt="Haptic intubation training device with a belt-driven motor on a black base" loading="lazy">
+        <figcaption>The device</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="control">Control architecture</h2>
+    <p>A haptic loop on an Arduino reads the handle angle from encoders every 10 ms and renders a layered tissue model: each layer the blade has passed (oral mucosa, epiglottic fold, arytenoid contact and a bone hard stop) adds a spring and damper. Pathology presets change each layer's stiffness and angle range, for example a wider soft layer for a high BMI or a stiffer epiglottis for Mallampati III&ndash;IV.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/intubation/low-level-controller.jpg" alt="Diagram of the low-level controller: encoders, angle unwrapping, tissue model, force-to-PWM and motor driver in a 10 ms loop, with a table of tissue layers and their stiffness and damping" loading="lazy">
+      <figcaption>Low-level controller and tissue model</figcaption>
+    </figure>
+    <p>The proposed ML architecture keeps this physics model and learns to correct and tune it: a residual force model for friction, cogging and belt losses, a pathology encoder from patient profile to layer parameters, and a skill-assessment model that scores each attempt.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/intubation/ml-architecture.jpg" alt="Diagram of the proposed ML architecture: a residual force model, a pathology encoder and a skill-assessment network around the runtime haptic loop" loading="lazy">
+      <figcaption>Proposed ML architecture</figcaption>
+    </figure>
+
+    <a class="back" href="../projects.html">&larr; All projects</a>
+  </main>
+
+  <footer>&copy; Copyright 2026 Kodai Tsutsui. Last updated: November 24, 2026.</footer>
+</body>
+</html>
