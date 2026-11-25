@@ -60,9 +60,24 @@
       </a>
     </div>
 
+    <h2 id="method">Training</h2>
+    <p>Every robot uses the same core from Acrobotics: PPO with a terrain curriculum, and one policy network that maps a height scan and the body state to joint targets, trained on 2,048 robots in parallel. Each new body needed only small reward and terrain changes, and about one GPU-day of training.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/beyond-acrobotics/training-pipeline.png" alt="Diagram of the shared training pipeline: terrain curriculum, policy network from height scan and body state to joint targets, and reward plus PPO, repeated for 25,000 iterations" loading="lazy">
+      <figcaption>The shared training pipeline, from prior work</figcaption>
+    </figure>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/beyond-acrobotics/goals-reached.png" alt="Line plot of the share of goals reached during training for ANYmal D, Go2-W and G1, with a dip and recovery for ANYmal D at the start of fine-tuning" loading="lazy">
+      <figcaption>Goals reached during training. This is a training statistic, with random actions, pushes, all difficulty levels and a 20 s limit, not a success rate.</figcaption>
+    </figure>
+
     <h2 id="anymal">ANYmal D</h2>
     <p>A policy trained on a perfect height map failed on the map built from depth cameras, because the camera map partly fills the gaps beside stones. I measured these errors in Gazebo, trained a learned noise model on them, and fine-tuned the policy on that model.</p>
     <p>On grid stones with the simulated errors, finishes rose from 3.7 % to 83.6 %. In Gazebo the fine-tuned policy still does much better on a perfect map than on the camera map, so perception is still the main gap. On clean maps it averages 88.0 % finishes across 11 terrains, though mixed columns remain unsolved.</p>
+    <figure>
+      <img class="diagram" src="../assets/img/projects/beyond-acrobotics/finetune-finish-rate.png" alt="Bar chart of ANYmal D finish rates on grid stones before and after fine-tuning: 98.6 and 97.2 percent on a clean map, 3.7 and 83.6 percent with the error model, and 0 of 3 and 9 of 35 in Gazebo with the camera map" loading="lazy">
+      <figcaption>Finish rate on grid stones before and after fine-tuning, at difficulty 0.7</figcaption>
+    </figure>
     <p class="status"><strong>Status:</strong> successfully deployed on the real ANYmal D over stairs and stepping stones.</p>
     <figure>
       <video src="../assets/video/anymal/mapnoise_grid_stones_d0.7.mp4" poster="../assets/img/posters/anymal/mapnoise_grid_stones_d0.7.jpg" controls muted loop playsinline preload="none" aria-label="Fine-tuned ANYmal D policy on grid stones in Isaac Sim"></video>
